@@ -1,0 +1,37 @@
+<div class="row py-4">
+  <div class="col-sm-12 col-lg-3">
+    <h5>Источники</h5>
+    {% for source in sources %}
+    <div class="form-check">
+      <input
+        class="form-check-input sourceCheck"
+        type="checkbox"
+        value=""
+        id="s{{source.id}}"
+      />
+      <label class="form-check-label" for="s{{source.id}}">
+        {{source.name}}
+      </label>
+    </div>
+    {% endfor %}
+    <h5>Содержание</h5>
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        value=""
+        id="popularCheck"
+      />
+      <label class="form-check-label" for="popularCheck"> Популярные </label>
+    </div>
+  </div>
+  <div class="col-sm-12 col-lg-9 centered-box">
+    <h3>Лаборатория музыки</h3>
+    <button class="btn btn-primary lab-play">
+      <i class="ri-play-fill"></i>Играть
+    </button>
+    <p class="text text-secondary">
+      Сейчас играет: <span class="lab-current-music"></span>
+    </p>
+  </div>
+</div>

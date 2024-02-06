@@ -1,0 +1,110 @@
+.title-info {
+    font-size: 1.2em;
+}
+
+body {
+    padding-bottom: 240px;
+}
+
+@media (max-width: 500px) {
+    .dropdown-menu{
+        height:200px;
+        overflow-y:auto;
+    }
+}
+
+@media (max-width: 630px) {
+    .music-text {
+        max-width: 200px;
+        text-decoration: none;
+    }
+}
+
+@media (min-width: 631px) {
+    .music-text {
+        width: 300px;
+        text-decoration: none;
+    }
+}
+
+
+.music-slider {
+    width: 100%
+}
+
+video {
+    width: 100%;
+    max-height: 100%;
+}
+
+.scrolling-wrapper {
+    overflow-x: scroll;
+    white-space: nowrap;
+}
+
+.card {
+    display: inline-block;
+    width: 200px; /* Задайте желаемую ширину карточки */
+    margin: 10px;
+}
+
+.tracklist-list, .yt-videos {
+    max-height: 200px;
+    overflow: scroll;
+}
+
+templates {
+    display: none;
+}
+
+#sidebar {
+    height: 100vh;
+    width: 500px;
+    position: fixed;
+    top: 0;
+    right: -500px;
+    background: white;
+    border: 3px solid #343a40;
+    transition: all 0.3s;
+    padding-top: 15px;
+    z-index: 100;
+  }
+
+.queue-tabs {
+    height: 70%;
+    overflow: scroll;
+}
+
+.sidebarToolButton {
+    float: right;
+}
+
+.queueBtn {
+    margin-right: 7px;
+}
+
+#sidebar.opened-sidebar {
+    right: 0;
+}
+
+@media (max-width: 500px) {
+    #sidebar {
+        width: 100%;
+    }
+}
+
+.tab-content {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.centered-box {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}

@@ -1,0 +1,9 @@
+django==4.2.7
+pillow
+django-extensions
+requests
+bs4
+lxml
+dateparser
+yt-dlp
+youtube_token.txt

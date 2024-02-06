@@ -1,0 +1,57 @@
+<table class="table">
+  <tbody class="queue">
+    {% for i, song in songs %}
+    <tr class="track" song_id="{{song.pk}}">
+      <th scope="row">
+        <p class="num">{{ i }}</p>
+      </th>
+      <td>
+        <button
+          song_id="{{song.pk}}"
+          class="btn btn-outline-secondary list-play-btn"
+          style="display: inline"
+        >
+          <i class="ri-play-fill"></i>
+        </button>
+      </td>
+      <td>
+        <a class="text-primary music-text"> {{ song.title }} </a>
+        <div class="text-secondary music-text">{{ song.artist }}</div>
+      </td>
+      <td>
+        <div class="dropdown trackmenu-dropdown" song_id="{{song.pk}}">
+          <button
+            class="btn btn-light"
+            type="button"
+            id="trackMenu"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="ri-arrow-down-s-line"></i>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="trackMenu">
+            <li>
+              <a class="dropdown-item track-action" action="playNext"
+                >Играть следующим</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item track-action" action="addToPlaylist"
+                >В плейлист</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item track-action" action="addToSavedQueue"
+                >Отложить</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item track-action" action="snippet">Сниппет</a>
+            </li>
+          </ul>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

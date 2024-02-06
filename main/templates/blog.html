@@ -1,0 +1,98 @@
+{% extends 'main.html' %}
+
+{% block body_content %}
+<div class="row">
+    <div class="col-md-8">
+      <h2>Записи пользователя {{ username }}</h2>
+      <hr>
+      {% for post in posts %}
+        <div class="card mb-3" post_id="{{ post.pk }}" owner_id="{{ post.owner.pk }}">
+          <div class="card-body">
+            <div class="row">
+                <div class="col-10"><h5 class="card-title">{{ post.title }}</h5></div>
+                {% if is_user_logged_in %}
+                <div class="col"><button class="btn btn-light edit-btn" post_id="{{ post.pk }}"><i class="ri-pencil-fill"></i></button></div>
+                <div class="col">
+                    <form method="POST" action="/deletepost">
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value="{{ post.pk }}"/>
+                        <button class="btn btn-light"><i class="ri-close-line"></i></button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+            <p class="card-text">{{ post.content|linebreaks|truncatewords:200 }}</p>
+            <a class="card-text" href="/post{{post.pk}}">Читать полностью...</a>
+            <div class="card-text">
+                <i class="ri-time-line"></i>
+                {{ post.publish_date }}
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <p>Нет записей в блоге</p>
+      {% endfor %}
+    </div>
+    {% if is_user_logged_in %}
+    <div class="col-md-4">
+      <h2 class="postFormHeader">Создать новую запись в блог</h2>
+      <form method="post" action="/createpost" class="postForm">
+        {% csrf_token %}
+        {% for f in form %}
+        <div class="form-group">
+            <label for="{{ f.id_for_label }}" class="form-label">{{f.label}}:</label>
+            {{ f }}
+        </div>
+        {% for error in f.errors %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endfor %}
+        {% endfor %}
+        <button type="submit" class="btn btn-primary write-btn">Написать</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+{% endblock %}
+
+{% block script_block %}
+{% if is_user_logged_in %}
+<script>
+    $(".edit-btn").click(function(e) {
+        let cancelBtn = document.querySelector(".cancel-btn");
+        if (cancelBtn != undefined) {
+            cancelBtn.click();
+        }
+        let form = document.querySelector(".postForm");
+        form.setAttribute("action", "/editpost");
+        document.querySelector(".postFormHeader").innerHTML = "Редактирование записи";
+        let postIdValue = document.createElement("input");
+        cancelBtn = document.createElement("button");
+        cancelBtn.setAttribute("class", "btn btn-danger cancel-btn");
+        cancelBtn.setAttribute("type", "button");
+        cancelBtn.innerHTML = "Отмена";
+        cancelBtn.addEventListener("click", function(e) {
+            let form = document.querySelector(".postForm");
+            form.setAttribute("action", "/createpost");
+            document.querySelector(".postFormHeader").innerHTML = "Создать новую запись в блог";
+            form.removeChild(document.querySelector(".hiddenPostId"));
+            form.removeChild(cancelBtn);
+        })
+        $.ajax({
+          url: `/api/get_post_by_id?post_id=${e.target.getAttribute("post_id")}`, 
+          method: 'get',  
+          dataType: 'json',
+          success: function(data){ 
+            document.querySelector(".form-title").value = data["title"];
+            document.querySelector(".form-content").value = data["content"];
+          }
+        });
+        postIdValue.setAttribute("type", "hidden");
+        postIdValue.setAttribute("class", "hiddenPostId");
+        postIdValue.setAttribute("name", "post_id");
+        postIdValue.setAttribute("value", e.target.getAttribute("post_id"));
+        form.appendChild(cancelBtn);
+        form.appendChild(postIdValue);
+    });
+  </script>
+{% endif %}
+{% endblock %}

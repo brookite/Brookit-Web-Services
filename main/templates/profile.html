@@ -1,0 +1,79 @@
+{% extends 'main.html' %}
+
+{% block body_content %}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-center">
+            {% if profile.avatar %}
+            <img src="{{ profile.avatar.url }}" class="rounded-circle avatar" style="width:30%;" alt="Avatar">
+            {% else %}
+            <i class="ri-user-line" style="font-size: 10em"></i>
+            {% endif %}
+          </div>
+          <h2 class="card-title">{{ user.first_name }} {{ user.middle_name|default_if_none:"" }} {{ user.last_name }}</h2>
+          <hr>
+          <div class="form-group">
+            <label for="username" class="text-secondary">Имя пользователя:</label>
+            <p>@{{ user.username }}</p>
+          </div>
+          <div class="form-group">
+            <label for="email" class="text-secondary">Электронная почта:</label>
+            <p>{{ user.email }}</p>
+          </div>
+          {% if user.birthday %}
+          <div class="form-group">
+            <label for="birthday" class="text-secondary">День рождения:</label>
+            <p>{{ user.birthday }}</p>
+          </div>
+          {% endif %}
+          {% if user.status %}
+          <div class="form-group">
+            <label for="status" class="text-secondary">О себе:</label>
+            <p>{{ user.status }}</p>
+          </div>
+          {% endif %}
+          {% if is_user_logged_in %}
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">Редактировать профиль</button>
+          {% endif %}
+          <a href="/blog?user={{ user_id }}" class="btn btn-secondary">Записи в блоге</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if is_user_logged_in %}
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Редактирование профиля</h5>
+          <button type="button" class="close btn btn-light" data-bs-dismiss="modal" aria-label="Close">
+            <i class="ri-close-line" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+            {% for f in form %}
+                <div class="form-group">
+                <label for="{{ f.id_for_label }}" class="form-label">{{f.label}}:</label>
+                {{ f }}
+                </div>
+                {% for error in f.errors %}
+                <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% load music_tags %}
+
+{% if song_list %}
+{% get_tracklist 'custom' song_list %}
+{% else %}
+<div class="container">
+    <h5 class="row justify-content-center">Ничего не найдено</h5>
+    <p class="row justify-content-center">Попробуйте перефразировать запрос
+        {% if user.is_superuser %} 
+        или <a class="row justify-content-center addNewSong" href="#">добавьте свою песню</a>
+        {% endif %}
+    </p>
+    </div>
+</div>
+{% endif %}

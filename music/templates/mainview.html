@@ -1,0 +1,39 @@
+{% load music_tags %}
+
+<h1 class="mt-4">Музыкальный проект</h1>
+<h6>версия 2024.01.17</h6>
+<p class="text-secondary">
+  На данный момент известно около {{ track_count }} треков
+</p>
+<h2 class="mt-4">Случайные треки</h2>
+<div class="dropdown">
+  <button
+    class="btn btn-primary"
+    type="button"
+    id="dropdownMenuButton"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    Выбрать источник
+  </button>
+  <ul
+    class="dropdown-menu"
+    id="source-select"
+    aria-labelledby="dropdownMenuButton"
+  >
+    {% for source in sources %} {% if source.pk == source_id %}
+    <li>
+      <a class="dropdown-item active" source_id="{{source.pk}}" href="#"
+        >{{ source.name }}</a
+      >
+    </li>
+    {% else %}
+    <li>
+      <a class="dropdown-item" source_id="{{source.pk}}" href="#"
+        >{{ source.name }}</a
+      >
+    </li>
+    {% endif %} {% endfor %}
+  </ul>
+</div>
+<div class="row main-row">{% get_tracklist 'random' source_id %}</div>

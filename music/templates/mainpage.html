@@ -1,0 +1,8 @@
+{% extends 'music.html' %}
+{% load music_tags %}
+
+{% block bodycontents %}
+<div class="appView">
+  {% main_view track_count source_id sources %}
+</div>
+{% endblock %}

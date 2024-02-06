@@ -1,0 +1,16 @@
+DELETE FROM music_song_musicsourcedate;
+DELETE FROM music_musicsource_songs;
+DELETE FROM music_musicsource;
+DELETE FROM music_playlist_songs;
+DELETE FROM music_playlist;
+DELETE FROM music_songlistendate;
+DELETE FROM music_song;
+DELETE FROM music_songsource;
+DELETE FROM sqlite_sequence WHERE name='music_song_musicsourcedate';
+DELETE FROM sqlite_sequence WHERE name='music_musicsource_songs';
+DELETE FROM sqlite_sequence WHERE name='music_musicsource';
+DELETE FROM sqlite_sequence WHERE name='music_playlist';
+DELETE FROM sqlite_sequence WHERE name='music_songlistendate';
+DELETE FROM sqlite_sequence WHERE name='music_song';
+DELETE FROM sqlite_sequence WHERE name='music_songsource';
+DELETE FROM sqlite_sequence WHERE name='music_playlist_songs';

@@ -1,0 +1,78 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="input-group input-group-lg">
+        <input
+          type="text"
+          class="form-control search-field"
+          placeholder="Введите название или автора песни..."
+        />
+      </div>
+    </div>
+  </div>
+  <div class="music-content py-4"></div>
+</div>
+{% if user.is_superuser %}
+<div
+  class="modal fade"
+  id="addSongModal"
+  tabindex="-1"
+  aria-labelledby="addSongModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Добавить песню</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="artistField" class="form-label">Исполнитель</label>
+            <input type="text" class="form-control" id="artistField" />
+          </div>
+          <div class="mb-3">
+            <label for="titleField" class="form-label">Название песни</label>
+            <input type="text" class="form-control" id="titleField" />
+          </div>
+        </form>
+        <div class="dropdown">
+          <button
+            class="btn btn-secondary dropdown-toggle"
+            type="button"
+            id="sampleDropdownMenu"
+            data-bs-toggle="dropdown"
+          >
+            Источник
+          </button>
+          <ul class="dropdown-menu">
+            {% for source in sources %}
+            <li>
+              <input
+                type="checkbox"
+                class="musicSourceCheckbox"
+                musicSource_id="{{ source.pk }}"
+              />{{ source.name }}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Закрыть
+        </button>
+        <button type="button" class="btn btn-primary addSong-btn">
+          Сохранить
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}

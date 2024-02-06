@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+
+{% block body_content %}
+<div class="card mb-3" post_id="{{ post.pk }}" owner_id="{{ post.owner.pk }}">
+    <div class="card-body">
+      <div class="row">
+          <div class="col-10"><h5 class="card-title">{{ post.title }}</h5></div>
+      </div>
+      <p class="card-text">{{ post.content|linebreaks }}</p>
+      <div class="card-text">
+          <i class="ri-time-line"></i>
+          {{ post.publish_date }}
+      </div>
+    </div>
+  </div>
+{% endblock %}

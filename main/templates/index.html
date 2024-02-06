@@ -1,0 +1,38 @@
+{% extends 'main.html' %} {% block body_content %}
+<div class="jumbotron jumbotron-fluid">
+  <h1 class="display-4">Добро пожаловать!</h1>
+  <p class="lead">
+    Этот сайт предназначен для тестирования и запуска различных сервисов,
+    разработанных Brookit
+  </p>
+  <hr class="my-4" />
+  <p>Авторизируйтесь на сайте и получите доступ к уникальным сервисам</p>
+  <p class="lead">
+    <a class="btn btn-primary btn-lg" href="/profile" role="button"
+      >Перейти в профиль</a
+    >
+  </p>
+</div>
+
+<div class="row row-cols-2">
+  <div class="col card">
+    <i class="ri-music-fill" style="font-size: 128px"></i>
+
+    <div class="card-body">
+      <h5 class="card-title">Музыкальный сервис</h5>
+      <p class="card-text">Приложение для создания музыкальных плейлистов</p>
+      <a href="/music" class="btn btn-primary">Перейти</a>
+    </div>
+  </div>
+
+  <div class="col card">
+    <i class="ri-article-fill" style="font-size: 128px"></i>
+
+    <div class="card-body">
+      <h5 class="card-title">Редактор статей</h5>
+      <p class="card-text">Приложение для создания статей</p>
+      <a href="/articles" class="btn btn-primary">Перейти</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

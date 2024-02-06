@@ -1,0 +1,450 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Music</title>
+    <!-- Подключение Bootstrap CSS -->
+    <link
+      href="{% static 'bootstrap/css/bootstrap.min.css' %}"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <link href="{% static 'css/music.css' %}?version=11" rel="stylesheet" />
+    <link href="{% static 'remixicon/remixicon.css' %}" rel="stylesheet" />
+  </head>
+  <body>
+    {% csrf_token %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand px-4" href="/music">Project Music</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item active">
+            <a class="nav-link main-link" href="#">Главная</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link saved-link" href="#">Избранное</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link search-link" href="#">Поиск</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link sources-link" href="#">Источники</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link lab-link" href="#">Лаборатория</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link settings-link" href="#">Настройки</a>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav">
+          <li>
+            <button class="btn btn-outline-light queueBtn">
+              <i class="ri-play-list-fill"></i>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <nav id="sidebar">
+      <button class="btn btn-outline-dark queueBtn sidebarToolButton">
+        <i class="ri-close-line"></i>
+      </button>
+      <button class="btn btn-outline-dark shuffleBtn sidebarToolButton">
+        <i class="ri-shuffle-line"></i>
+      </button>
+      <ul class="nav nav-pills">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            id="current-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#currentQueue"
+            type="button"
+            role="tab"
+            aria-controls="currentQueue"
+            aria-selected="true"
+            >Текущая</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            id="saved-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#savedQueue"
+            type="button"
+            role="tab"
+            aria-controls="savedQueue"
+            aria-selected="false"
+            >Отложенная</a
+          >
+        </li>
+      </ul>
+      <div class="queue-tabs">
+        <table
+          class="table tab-content active show"
+          id="currentQueue"
+          role="tabpanel"
+          aria-labelledby="current-tab"
+          tabindex="0"
+        >
+          <tbody class="queue queue-current"></tbody>
+        </table>
+        <table
+          class="table tab-content"
+          id="savedQueue"
+          role="tabpanel"
+          aria-labelledby="saved-tab"
+          tabindex="1"
+        >
+          <tbody class="queue queue-saved"></tbody>
+        </table>
+      </div>
+    </nav>
+
+    <div class="container">{% block bodycontents %} {% endblock %}</div>
+
+    <footer class="bg-dark text-white p-3 fixed-bottom footer">
+      <div class="container text-center">
+        <div class="row">
+          <div class="music-info col-lg-6 col-sm-12">
+            <div class="title-info">Выберите песню</div>
+            <div>
+              <span class="artist-info"></span>
+              <span
+                style="display: none"
+                class="badge bg-primary status-info"
+              ></span>
+            </div>
+            <div class="time-info">00:00/00:00</div>
+          </div>
+          <div class="audio-controls col-lg-6 col-sm-12">
+            <button class="btn btn-secondary previous-button">
+              <i class="ri-skip-left-fill"></i>
+            </button>
+            <button class="btn btn-secondary play-button">
+              <i class="ri-play-fill"></i>
+            </button>
+            <button class="btn btn-secondary next-button">
+              <i class="ri-skip-right-fill"></i>
+            </button>
+            <button class="btn btn-secondary" id="like-button">
+              <i class="ri-heart-fill"></i>
+            </button>
+            <button class="btn btn-secondary" id="dislike-button">
+              <i class="ri-dislike-fill"></i>
+            </button>
+            {% if settings.allowVideo %}
+            <button class="btn btn-secondary pip-button">
+              <i class="ri-picture-in-picture-line"></i>
+            </button>
+            {% endif %}
+            <button class="btn btn-secondary popup-info-button">
+              <i class="ri-arrow-up-s-line"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <div
+      class="toast-container position-fixed bottom-0 end-0 p-3"
+      style="z-index: 10000"
+    ></div>
+
+    <div
+      class="modal fade"
+      id="infoModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="infoModalTitle"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog modal-dialog-centered modal-lg video-view-modal"
+        role="document"
+      >
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="container text-center">
+              <div class="row">
+                <div class="col-12 view-section">
+                  {% if settings.allowVideo %}
+                  <div class="embed-responsive embed-responsive-16by9">
+                    <video
+                      autoplay
+                      class="embed-responsive-item video-view"
+                    ></video>
+                  </div>
+                  {% else %}
+                  <i class="ri-file-music-line" style="font-size: 20em"></i>
+                  {% endif %}
+                  <div class="row">
+                    <span class="start-time col-2">00:00</span>
+                    <input
+                      type="range"
+                      class="timeline-slider col-8"
+                      min="0"
+                      max="100"
+                      value="0"
+                    />
+                    <span class="end-time col-2">00:00</span>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">
+                      <button class="btn btn-secondary col previous-button">
+                        <i class="ri-skip-left-fill"></i>
+                      </button>
+                      <button class="btn btn-secondary col play-button">
+                        <i class="ri-play-fill"></i>
+                      </button>
+                      <button class="btn btn-secondary col next-button">
+                        <i class="ri-skip-right-fill"></i>
+                      </button>
+                      {% if settings.allowVideo %}
+                      <button class="btn btn-secondary fullscreen-button">
+                        <i class="ri-fullscreen-line"></i>
+                      </button>
+                      <button class="btn btn-secondary pip-button">
+                        <i class="ri-picture-in-picture-line"></i>
+                      </button>
+                      {% endif %}
+                      <button class="btn btn-secondary col lyrics-button">
+                        <i class="ri-text-snippet"></i>
+                      </button>
+                      <button class="btn btn-secondary col popup-info-button">
+                        <i class="ri-arrow-down-s-line"></i>
+                      </button>
+                      <input
+                        type="range"
+                        class="volume-slider"
+                        min="0"
+                        max="100"
+                        value="100"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="lyrics-section overflow-scroll"
+                  style="display: none"
+                >
+                  <input type="text" class="form-control" id="lyricsPrompt" />
+                  <button class="btn btn-primary mb-2 lyrics-prompt-btn">
+                    Поиск
+                  </button>
+
+                  <h2 class="songName"></h2>
+                  <p class="text text-secondary">
+                    Дата релиза: <span class="release-date"></span>
+                  </p>
+                  <div class="lyrics-text"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="trackInfoModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title trackinfo-name">Информация о треке</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Закрыть"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <h6>Добавлено</h6>
+            <p class="text text-primary trackinfo-addeddate">Дата добавления</p>
+            <h6>Ваши прослушивания</h6>
+            <ul class="list-group tracklist-list listenlist">
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center trackinfo-listentime"
+              >
+                Дата прослушивания
+              </li>
+            </ul>
+            <h6>Играло на музыкальном источнике</h6>
+            <ul class="list-group tracklist-list playlist">
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center trackinfo-playtime"
+              >
+                Дата прослушивания
+                <span class="badge bg-primary rounded-pill trackinfo-source"
+                  >Источник</span
+                >
+              </li>
+            </ul>
+            {% if user.is_superuser %}
+            <h6>Поиск в источнике YouTube</h6>
+            <input
+              type="text"
+              class="form-control"
+              id="sourceURL"
+              placeholder="URL"
+              readonly
+            />
+            <button class="btn btn-primary mb-2 yt-search-btn">Поиск</button>
+            <div class="list-group yt-videos" style="visibility: hidden">
+              <a
+                href="#"
+                class="list-group-item list-group-item-action active yt-video"
+                aria-current="true"
+              >
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1 yt-video-name">Название видео</h5>
+                  <small class="yt-video-date">Дата загрузки</small>
+                </div>
+                <p class="mb-1 yt-video-channel">Канал</p>
+              </a>
+            </div>
+            {% endif %}
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Закрыть
+            </button>
+            {% if user.is_superuser %}
+            <button type="button" class="btn btn-primary save-song-btn">
+              Сохранить
+            </button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="addToPlaylistModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Добавить в плейлист</h5>
+          </div>
+          <div class="modal-body">
+            <ul class="list-group py-2 playlists-checkboxes">
+              <li class="list-group-item playlist-checkbox">
+                <input
+                  class="form-check-input me-1 playlist-input-checkbox"
+                  type="checkbox"
+                  value=""
+                  aria-label="..."
+                />
+                <span class="playlistName">Добавленные</span>
+              </li>
+            </ul>
+            <button class="btn btn-secondary" id="like-playlist-btn">
+              <i class="ri-heart-fill"></i>
+              Понравилось
+            </button>
+            <button class="btn btn-secondary" id="dislike-playlist-btn">
+              <i class="ri-dislike-fill"></i>
+              Не понравилось
+            </button>
+          </div>
+          <div class="modal-footer">
+            {% if user.is_superuser %}
+            <button type="button" class="btn btn-primary addToPlaylistBtn">
+              Сохранить
+            </button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <templates>
+      <table>
+        <tr class="track" song_id="0">
+          <th scope="row">
+            <p class="num">0</p>
+          </th>
+          <td>
+            <button
+              song_id="0"
+              class="btn btn-outline-secondary list-play-btn"
+              style="display: inline"
+            >
+              <i class="ri-play-fill"></i>
+            </button>
+          </td>
+          <td>
+            <a class="text-primary music-text"> </a>
+            <div class="text-secondary music-text"></div>
+          </td>
+          <td>
+            <div class="dropdown trackmenu-dropdown" song_id="0">
+              <button
+                class="btn btn-light"
+                type="button"
+                id="trackMenu"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="ri-arrow-down-s-line"></i>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="trackMenu">
+                <li>
+                  <a class="dropdown-item track-action" action="playNext"
+                    >Играть следующим</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item track-action" action="addToPlaylist"
+                    >В плейлист</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item track-action" action="addToSavedQueue"
+                    >Отложить</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item track-action" action="snippet"
+                    >Сниппет</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </templates>
+
+    <!-- Подключение Bootstrap JS и jQuery -->
+    <script src="{% static 'libs/jquery-3.7.1.min.js' %}"></script>
+    <script
+      src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="{% static 'brookitservices/js/main.js' %}?version=1"></script>
+    <script src="{% static 'js/music.js' %}"></script>
+  </body>
+</html>

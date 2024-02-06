@@ -1,0 +1,12 @@
+/venv/
+.vscode/
+__pycache__/
+/cache/
+.idea/
+node_modules/
+ziprepo.json
+/music/streams/radios
+db.sqlite3
+/articles/frontend
+/media/
+youtube_token.txt

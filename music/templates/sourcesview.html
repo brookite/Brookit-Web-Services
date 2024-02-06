@@ -1,0 +1,28 @@
+<h1 class="mt-4">Радиостанции</h1>
+<div class="scrolling-wrapper">
+    <!-- Карточки с радиостанциями -->
+    {% for radio in radios %}
+    <div class="card text-center p-3">
+        <a class="radio-play-btn" href="#" stream_url="{{radio.stream_url}}">
+            <img src="{{ radio.logo.url }}" class="img-fluid mb-3" alt="{{radio.name}}">
+            <h4 class="radio-name">{{ radio.name }}</h4>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+<h1 class="mt-4">Источники</h1>
+<div class="row main-row">
+    <div class="dropdown">
+        <button class="btn btn-primary" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            Выбрать источник
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            {% for source in sources %}
+            <li><a class="dropdown-item" source_id={{source.pk}} href="#">{{ source.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="music-content">
+
+    </div>
+</div>

@@ -1,0 +1,8 @@
+{% extends 'music.html' %}
+{% load music_tags %}
+
+{% block bodycontents %}
+<div class="appView">
+  {% search_view user %}
+</div>
+{% endblock %}

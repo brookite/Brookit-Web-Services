@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title }}</title>
+    <link
+      href="{% static 'bootstrap/css/bootstrap.min.css' %}"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <link href="{% static 'brookitservices/css/main.css' %}" rel="stylesheet" />
+    <link href="{% static 'remixicon/remixicon.css' %}" rel="stylesheet" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand px-4" href="#">Brookit Services</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarText"
+        aria-controls="navbarText"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Главная</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">О нас</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          {% if not request.user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Вход</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/register">Регистрация</a>
+          </li>
+          {% else %}
+
+          <li class="nav-item">
+            <a class="nav-link" href="/profile">{{ username }}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Выйти</a>
+          </li>
+
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+    <div class="container px-4 py-4">
+      {% block body_content %} {% endblock %}
+    </div>
+    <div
+      class="toast-container position-absolute p-3 top-0 end-0"
+      style="z-index: 11"
+    ></div>
+    <script src="{% static 'libs/jquery-3.7.1.min.js' %}"></script>
+    <script
+      src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="{% static 'brookitservices/js/main.js' %}"></script>
+    {% block script_block %} {% endblock %}
+  </body>
+</html>

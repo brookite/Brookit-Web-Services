@@ -1,0 +1,85 @@
+<div class="row py-4">
+  <div class="col-sm-12 col-lg-3">
+    <div class="btn-group-vertical d-flex py-3" role="group" aria-label="...">
+      <button class="btn btn-primary createBtn">Создать новый плейлист</button>
+      <button class="btn btn-danger removeBtn">
+        Удалить выбранный плейлист
+      </button>
+    </div>
+    <div class="list-group playlist-list"></div>
+  </div>
+  <div class="col-sm-12 col-lg-9 playlist-content"></div>
+</div>
+<div
+  class="modal fade"
+  id="addPlaylistModal"
+  tabindex="-1"
+  aria-labelledby="addPlaylistModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Создать плейлист</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="nameField" class="form-label">Название</label>
+            <input type="text" class="form-control" id="nameField" />
+          </div>
+          <div class="mb-3">
+            <input type="checkbox" class="form-check-input" id="publicField" />
+            <label for="publicField" class="form-check-label">Публичный</label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Закрыть
+        </button>
+        <button type="button" class="btn btn-primary createPlaylist-btn">
+          Сохранить
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="removePlaylistModal"
+  tabindex="-1"
+  aria-labelledby="removePlaylistModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Удалить плейлист</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p class="delete-msg">Вы уверены в удалении в плейлиста?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Закрыть
+        </button>
+        <button type="button" class="btn btn-danger removePlaylist-btn">
+          Удалить
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
