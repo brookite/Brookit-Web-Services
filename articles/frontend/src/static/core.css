@@ -1,0 +1,278 @@
+:root {
+    --background: #f5f4e6;
+    --text-above-accent-color: #f5f4e6;
+    --accent-color: #38261c; 
+    --non-active-color: #57453b;
+    --tooltip-color: #38261cf4;
+    --article-font-family: Georgia,Cambria,'Times New Roman',serif;
+    --tool-font-family: Arial,Tahoma,sans-serif;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--accent-color)
+}
+
+.ql-container {
+    font-family: var(--article-font-family);
+    font-size: 18px;
+}
+
+.page .ql-editor {
+    font-style: normal;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.page p {
+    word-wrap: break-word;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.page blockquote {
+    border-left: 4px solid black;
+    padding-left: 20px;
+    border-radius: 2px;
+    position: relative;
+    font-style: italic;
+}
+
+.page a {
+    color: inherit;
+}
+
+.page h1 {
+    font-size: 32px;
+}
+
+
+input:focus, textarea:focus, button:focus, [contenteditable=true]:focus {
+  outline: none;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+.view {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    padding: 30px 0;
+    width: 100%;
+}
+
+.rightbar {
+    position: fixed;
+    left: 50%;
+    top: 0;
+    right: 0;
+    margin-top: 80px;
+    margin-left: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+button.pushable {
+    border: 2px var(--accent-color) solid;
+    color: var(--accent-color);
+    padding: 10px;
+    border-radius: 10px;
+    background: none;
+    font-size: 16px;
+    font-weight: 800;
+    font-family: var(--tool-font-family);
+    margin: 5px; 
+}
+
+.button_text {
+    font-weight: 600;
+    font-family: var(--tool-font-family);
+}
+
+.icon {
+    font-size: 20px;
+}
+
+
+button.pushable:hover {
+    background-color: var(--accent-color);
+    color:white;
+}
+
+[data-placeholder].empty::before {
+    content: attr(data-placeholder);
+    position: absolute;
+    overflow: hidden;
+}
+
+
+.lineButtons {
+    visibility: hidden;
+    top: 100px;
+    position: absolute;
+    width: 100px;
+    display: inline-block;
+    right: 100%;
+    margin-right: -14px;
+}
+
+.tooltip {
+    display: flex;
+}
+
+.formatTooltip, .tooltip {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: var(--tooltip-color);
+    color: var(--text-above-accent-color);
+    border-radius: 12px;
+    padding: 10px 15px;
+    line-height: 0;
+    white-space: nowrap;
+}
+
+.textTooltip {
+    display: none;
+    max-width: 220px;
+    font-size: 14px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: var(--tooltip-color);
+    color: var(--text-above-accent-color);
+    border-radius: 12px;
+    padding: 10px 15px;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.menuTooltip {
+    display: none;
+    max-height: 350px;
+    max-width: 240px;
+    position: absolute;
+    overflow: scroll;
+    left: 0;
+    top: 0;
+    background-color: var(--tooltip-color);
+    color: var(--text-above-accent-color);
+    border-radius: 12px;
+    padding: 10px 15px;
+    white-space: nowrap;
+}
+
+.menuTooltip::-webkit-scrollbar {
+    display: none;
+}
+
+.menuItem {
+    font-family: var(--tool-font-family);
+    padding: 7px;
+}
+
+.tooltipPrompt {
+    margin: 0;
+    border: none;
+    background-color: transparent;
+    color: var(--text-above-accent-color);
+    width: 100%
+}
+
+.tooltipPrompt::placeholder {
+    color: var(--text-above-accent-color);
+}
+
+.tooltipButton {
+    color: white
+}
+
+.tooltipButton.applied {
+    color: gray;
+}
+
+#headerH2Button {
+    font-size: 18px;
+}
+
+.formatTooltip.shown, .textTooltip.shown, .menuTooltip.shown {
+    display: block;
+}
+
+.tooltip.shown {
+    display: flex;
+}
+
+.inlineButton {
+    display: inline-block;
+    border: none;
+    background: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+address {
+    font-size: 15px;
+    line-height: 18px;
+    color: var(--non-active-color);
+    margin: 15px 15px;
+    font-style: normal;
+}
+
+.shown {
+    visibility: visible;
+}
+
+@media (max-width: 1050px) {
+    .rightbar {
+        position: static;
+        display: flex;
+        flex-direction: row;
+        max-width: 700px;
+        width: 100%;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 400px) {
+    .page .ql-editor {
+        font-style: normal;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+    
+    .page h1 {
+        font-size: 24px;
+    }
+
+    .inlineButton {
+        font-size: 14px;
+    }
+
+    #headerH2Button {
+        font-size: 10px;
+    }
+
+    .lineButtons > .inlineButton {
+        font-size: 18px;
+    }
+
+    div.button {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 950px) {
+    .lineButtons {
+        right: 0;
+    }
+}
+
+.hidden {
+    display: none;
+}

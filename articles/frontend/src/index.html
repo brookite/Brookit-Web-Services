@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brookit Articles</title>
+</head>
+<body>
+    <main>
+        <div class="view">
+            <header class="article_header">
+
+            </header>
+            <article class="page page_edit">
+                
+            </article>
+            <div class="lineButtons" id="mainLineButtons">
+                <button class="inlineButton ri-image-line" id="image_button"></button>
+                <button class="inlineButton ri-add-line" id="add_more_button"></button>
+                <div class="menuTooltip" id="addMenu">
+                    <div class="menuItem">
+                        <i class="ri-image-fill"></i>
+                        <span>Изображение</span>
+                    </div>
+                    <div class="menuItem">
+                        <i class="ri-film-fill"></i>
+                        <span>Видео</span>
+                    </div>
+                    <div class="menuItem subMenu">
+                        <i class="ri-heading"></i>
+                        <span>Заголовки</span>
+                        <div class="menuTooltip">
+                            <div class="menuItem">
+                                <i class="ri-h-1"></i>
+                                <span>Уровень 1</span>
+                            </div>
+                            <div class="menuItem">
+                                <i class="ri-h-2"></i>
+                                <span>Уровень 2</span>
+                            </div>
+                            <div class="menuItem">
+                                <i class="ri-h-3"></i>
+                                <span>Уровень 3</span>
+                            </div>
+                            <div class="menuItem">
+                                <i class="ri-h-4"></i>
+                                <span>Уровень 4</span>
+                            </div>
+                            <div class="menuItem">
+                                <i class="ri-h-5"></i>
+                                <span>Уровень 5</span>
+                            </div> 
+                        </div>
+                        </div>
+                        <div class="menuItem">
+                            <i class="ri-code-box-line"></i>
+                            <span>Встраиваемый контент</span>
+                        </div>
+                        <div class="menuItem">
+                            <i class="ri-code-block"></i>
+                            <span>Код</span>
+                        </div>
+                        <div class="menuItem">
+                            <i class="ri-omega"></i>
+                            <span>Формула</span>
+                        </div>
+                        <div class="menuItem">
+                            <i class="ri-list-unordered"></i>
+                            <span>Маркированный список</span>
+                        </div>
+                        <div class="menuItem">
+                            <i class="ri-list-ordered"></i>
+                            <span>Нумерованный список</span>
+                        </div>
+                        <div class="menuItem">
+                            <i class="ri-list-check-3"></i>
+                            <span>Список задач</span>
+                        </div>
+                        <div class="menuItem">
+                            <i class="ri-table-view"></i>
+                            <span>Таблица</span>
+                        </div>
+                    </div>
+                </div>
+            </div>     
+            <div class="tooltip" id="mainTooltip">
+                <input type="url" class="tooltipPrompt" placeholder="Введите ссылку...">
+                <button id="mainTooltipCloseButton" class="tooltipButton inlineButton ri-close-line"></button>
+            </div>
+            <div class="textTooltip" id="textTooltip">
+                <span class="tooltipText"></span>
+            </div>
+            <div class="formatTooltip" id="mainFormatTooltip">
+                <button id="boldButton" class="tooltipButton inlineButton ri-bold"></button>
+                <button id="italicButton" class="tooltipButton inlineButton ri-italic"></button>
+                <button id="underlineButton" class="tooltipButton inlineButton ri-underline"></button>
+                <button id="linkButton" class="tooltipButton inlineButton ri-link"></button>
+                <button id="strikeButton" class="tooltipButton inlineButton ri-strikethrough"></button>
+                <button id="headerH1Button" class="tooltipButton inlineButton ri-heading"></button>
+                <button id="headerH2Button" class="tooltipButton inlineButton ri-heading"></button>
+                <button id="highlightButton" class="tooltipButton inlineButton ri-mark-pen-fill"></button>
+                <button id="quoteButton" class="tooltipButton inlineButton ri-double-quotes-r"></button>
+            </div>
+        </div>
+        <div class="rightbar">
+            <div class="button"><button class="pushable" id="edit_button"><i class="icon ri-pencil-fill"></i></button><span class="button_text">Редактировать</span></d>
+            <div class="button"><button class="pushable" id="publish_button"><i class="icon ri-article-fill"></i></button><span class="button_text">Публиковать</span></div>
+            <div class="button"><button class="pushable" id="settings_button"><i class="icon ri-settings-3-fill"></i></button><span class="button_text">Настроить</span></div>
+            <div class="button"><button class="pushable" id="settings_button"><i class="icon ri-markdown-fill"></i></button><span class="button_text">Экспорт</span></div>
+        </div>
+    </main>
+</body>
+</html>

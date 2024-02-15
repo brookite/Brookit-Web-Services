@@ -6,4 +6,3 @@ bs4
 lxml
 dateparser
 yt-dlp
-youtube_token.txt
