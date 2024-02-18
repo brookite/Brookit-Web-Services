@@ -5,5 +5,5 @@ export function isEditMode() {
 }
 
 export function isMobileView() {
-  return parseInt($(document).width()) <= 900;
+  return parseInt($(document).width()) <= 950;
 }

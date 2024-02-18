@@ -18,70 +18,71 @@
                 <button class="inlineButton ri-image-line" id="image_button"></button>
                 <button class="inlineButton ri-add-line" id="add_more_button"></button>
                 <div class="menuTooltip" id="addMenu">
-                    <div class="menuItem">
+                    <div class="menuItem" id="menuImage">
                         <i class="ri-image-fill"></i>
                         <span>Изображение</span>
                     </div>
-                    <div class="menuItem">
+                    <div class="menuItem" id="menuVideo">
                         <i class="ri-film-fill"></i>
                         <span>Видео</span>
                     </div>
-                    <div class="menuItem subMenu">
+                    <div class="menuItem" id="menuHeaders">
                         <i class="ri-heading"></i>
                         <span>Заголовки</span>
-                        <div class="menuTooltip">
-                            <div class="menuItem">
-                                <i class="ri-h-1"></i>
-                                <span>Уровень 1</span>
-                            </div>
-                            <div class="menuItem">
-                                <i class="ri-h-2"></i>
-                                <span>Уровень 2</span>
-                            </div>
-                            <div class="menuItem">
-                                <i class="ri-h-3"></i>
-                                <span>Уровень 3</span>
-                            </div>
-                            <div class="menuItem">
-                                <i class="ri-h-4"></i>
-                                <span>Уровень 4</span>
-                            </div>
-                            <div class="menuItem">
-                                <i class="ri-h-5"></i>
-                                <span>Уровень 5</span>
-                            </div> 
                         </div>
-                        </div>
-                        <div class="menuItem">
+                        <div class="menuItem" id="menuEmbed">
                             <i class="ri-code-box-line"></i>
                             <span>Встраиваемый контент</span>
                         </div>
-                        <div class="menuItem">
+                        <div class="menuItem" id="menuCode">
                             <i class="ri-code-block"></i>
                             <span>Код</span>
                         </div>
-                        <div class="menuItem">
+                        <div class="menuItem" id="menuFormula">
                             <i class="ri-omega"></i>
                             <span>Формула</span>
                         </div>
-                        <div class="menuItem">
+                        <div class="menuItem" id="menuUnorderedList">
                             <i class="ri-list-unordered"></i>
                             <span>Маркированный список</span>
                         </div>
-                        <div class="menuItem">
+                        <div class="menuItem" id="menuNumeratedList">
                             <i class="ri-list-ordered"></i>
                             <span>Нумерованный список</span>
                         </div>
-                        <div class="menuItem">
+                        <div class="menuItem" id="menuTodo">
                             <i class="ri-list-check-3"></i>
                             <span>Список задач</span>
                         </div>
-                        <div class="menuItem">
+                        <div class="menuItem" id="menuTable">
                             <i class="ri-table-view"></i>
                             <span>Таблица</span>
                         </div>
                     </div>
+                    <div class="menuTooltip subMenu" for="menuHeaders">
+                        <div class="menuItem">
+                            <i class="ri-h-1"></i>
+                            <span>Уровень 1</span>
+                        </div>
+                        <div class="menuItem">
+                            <i class="ri-h-2"></i>
+                            <span>Уровень 2</span>
+                        </div>
+                        <div class="menuItem">
+                            <i class="ri-h-3"></i>
+                            <span>Уровень 3</span>
+                        </div>
+                        <div class="menuItem">
+                            <i class="ri-h-4"></i>
+                            <span>Уровень 4</span>
+                        </div>
+                        <div class="menuItem">
+                            <i class="ri-h-5"></i>
+                            <span>Уровень 5</span>
+                        </div> 
+                    </div>
                 </div>
+                
             </div>     
             <div class="tooltip" id="mainTooltip">
                 <input type="url" class="tooltipPrompt" placeholder="Введите ссылку...">

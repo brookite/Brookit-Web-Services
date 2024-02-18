@@ -76,15 +76,12 @@ export class MenuItem extends ViewElement {
         this.text = element;
       }
     }
-    let subMenu = $(".menuTooltip", element).get(0);
+    let subMenu = $(`[for=${this.itemElement.getAttribute("id")}]`).get(0);
     if (subMenu) {
       this.subMenu = new PopupMenu(subMenu);
-      this.subMenu.setRelativePosition(this.getJQueryElement());
       $(element).on("mouseover", () => {
+        this.subMenu.setRelativePosition(this.getJQueryElement());
         this.subMenu.show();
-      });
-      $(element).on("mouseout", () => {
-        this.subMenu.hide();
       });
     }
   }
@@ -165,8 +162,8 @@ export class PopupMenu extends ViewElement {
 
   setRelativePosition(element) {
     this.getJQueryElement().css({
-      top: element.outerHeight(),
       left: element.outerWidth(),
+      top: element.offset().top - element.parent().offset().top,
     });
   }
 }
@@ -182,6 +179,10 @@ export class AddMenu extends PopupMenu {
       top: element.outerHeight(),
       left: element.outerWidth(),
     };
+    if (isMobileView()) {
+      styles["left"] =
+        -this.getJQueryElement().outerWidth() + (3 / 2) * element.outerWidth();
+    }
     this.getJQueryElement().css(styles);
   }
 }

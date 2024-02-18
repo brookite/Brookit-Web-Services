@@ -157,7 +157,7 @@ button.pushable:hover {
     max-height: 350px;
     max-width: 240px;
     position: absolute;
-    overflow: scroll;
+    overflow-y: scroll;
     left: 0;
     top: 0;
     background-color: var(--tooltip-color);
@@ -167,6 +167,10 @@ button.pushable:hover {
     white-space: nowrap;
 }
 
+.subMenu {
+    z-index: 10;
+}
+
 .menuTooltip::-webkit-scrollbar {
     display: none;
 }
@@ -174,6 +178,11 @@ button.pushable:hover {
 .menuItem {
     font-family: var(--tool-font-family);
     padding: 7px;
+    position: relative;
+}
+
+.menuItem.subMenu > .menuTooltip {
+    overflow:visible;
 }
 
 .tooltipPrompt {
