@@ -169,6 +169,8 @@ button.pushable:hover {
 
 .subMenu {
     z-index: 10;
+    position: relative;
+    background-color: transparent;
 }
 
 .menuTooltip::-webkit-scrollbar {

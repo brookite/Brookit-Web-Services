@@ -83,6 +83,9 @@ export class MenuItem extends ViewElement {
         this.subMenu.setRelativePosition(this.getJQueryElement());
         this.subMenu.show();
       });
+      $(element).on("mouseout", () => {
+        this.subMenu.hide();
+      });
     }
   }
 
@@ -160,12 +163,7 @@ export class PopupMenu extends ViewElement {
     super.setVisible(state);
   }
 
-  setRelativePosition(element) {
-    this.getJQueryElement().css({
-      left: element.outerWidth(),
-      top: element.offset().top - element.parent().offset().top,
-    });
-  }
+  setRelativePosition(element) {}
 }
 
 export class AddMenu extends PopupMenu {
