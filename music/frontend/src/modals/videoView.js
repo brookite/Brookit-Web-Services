@@ -2,10 +2,10 @@ let memory = new Map();
 
 export default function initLyrics(player) {
   player.onMediaPlayed = (song) => {
+    $("#lyricsPrompt").val(`${song.artist} - ${song.title}`);
     if (
-      document.querySelector(".video-view-modal").classList.contains("modal-lg")
+      document.querySelector(".video-view-modal").classList.contains("modal-xl")
     ) {
-      $("#lyricsPrompt").val(`${song.artist} - ${song.title}`);
       document.querySelector(".lyrics-prompt-btn").click();
     }
   };
@@ -28,7 +28,7 @@ export default function initLyrics(player) {
         $("#lyricsPrompt").val(`${song.artist} - ${song.title}`);
       }
 
-      $(".lyrics-section").css("height", $(".video-view").height());
+      $(".lyrics-section").css("height", $(".view-section").height());
       openLyrics(player);
     } else {
       element.classList.remove("modal-xl");

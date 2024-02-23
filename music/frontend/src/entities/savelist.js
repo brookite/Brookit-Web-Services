@@ -6,6 +6,7 @@ export const DEFAULT_SAVED_ID = 10;
 export class LocalQueue extends Queue {
   constructor() {
     super("local", DEFAULT_SAVED_ID, document.querySelector(".queue-saved"));
+    this.toDelete = undefined;
     if (localStorage.getItem("saved") != undefined) {
       this.tracks = JSON.parse(localStorage.getItem("saved"));
       for (let i = 0; i < this.tracks.length; i++) {
@@ -64,10 +65,14 @@ export class LocalQueue extends Queue {
   }
 
   get() {
+    if (this.toDelete != undefined) {
+      this.remove(this.toDelete);
+      this.setPointer(this.getPointer() - 2);
+    }
     let song = super.get();
-    this.remove(song);
-    this.setPointer(this.getPointer() - 2);
+    this.nextSong = undefined;
     this.initState = true;
+    this.toDelete = song;
     return song;
   }
 }

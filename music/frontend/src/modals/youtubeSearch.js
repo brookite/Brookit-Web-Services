@@ -18,6 +18,20 @@ export class YoutubeSearch extends ModalView {
         },
       });
     });
+
+    $(".save-song-btn").click(() => {
+      $.ajax({
+        url: `/music/api/editSong`,
+        method: "post",
+        dataType: "json",
+        data: {
+          song_id: $(".trackinfo-name").attr("song_id"),
+          source_url: document.querySelector("#sourceURL").value.split("=")[1],
+          csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val(),
+        },
+        success: (data) => {},
+      });
+    });
   }
 
   static viewYtSearch(data) {

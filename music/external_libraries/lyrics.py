@@ -68,7 +68,11 @@ class GeniusService(LyricsService):
 
         date = song["release_date_components"]
         if date:
-            date = datetime.date(date["year"], date["month"], date["day"])
+            date = datetime.date(
+                date.get("year", 0),
+                date.get(date["month"], 1),
+                date.get(date["day"], 1),
+            )
 
         r = requests.get(song["url"])
         soup = bs(r.text, "lxml")
