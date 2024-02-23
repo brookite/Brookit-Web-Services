@@ -1,0 +1,39 @@
+version: '3.8'
+
+volumes:
+  staticfiles:
+  media:
+
+services:
+
+  django:
+    build:
+      context: .
+    ports:
+      - '8000:8000'
+    container_name: django
+    restart: always
+    volumes:
+      - ./:/app
+      - staticfiles:/app/staticfiles
+      - media:/app/media
+    command: sh -c "python3.12 manage.py collectstatic --no-input &&
+                    python3.12 manage.py makemigrations &&
+                    python3.12 manage.py migrate &&
+                    python3.12 manage.py runserver 0.0.0.0:8000"
+
+  nginx:
+    container_name: nginx
+    working_dir: /app
+    image: nginx:stable-alpine
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - staticfiles:/app/staticfiles
+      - media:/app/media
+      - ./deploy/nginx/:/etc/nginx/conf.d:ro
+    links:
+      - django
+    depends_on:
+      - django
