@@ -4,8 +4,10 @@
     --accent-color: #38261c; 
     --non-active-color: #57453b;
     --tooltip-color: #38261cf4;
+    --tooltip-hover-color: #1b120df7;
     --article-font-family: Georgia,Cambria,'Times New Roman',serif;
     --tool-font-family: Arial,Tahoma,sans-serif;
+    --hr-color: grey;
 }
 
 body {
@@ -46,6 +48,11 @@ body {
     font-size: 32px;
 }
 
+.page hr {
+    display: block;
+    border-top: 1px solid var(--hr-color);
+    content: "";
+}
 
 input:focus, textarea:focus, button:focus, [contenteditable=true]:focus {
   outline: none;
@@ -73,7 +80,6 @@ main {
     margin-left: 350px;
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
 button.pushable {
@@ -181,6 +187,17 @@ button.pushable:hover {
     font-family: var(--tool-font-family);
     padding: 7px;
     position: relative;
+    cursor: pointer;
+}
+
+.menuItem:hover {
+    background-color: var(--tooltip-hover-color);
+    border-radius: 5px;
+}
+
+.menuItem:active {
+    background-color: var(--tooltip-hover-color);
+    border-radius: 5px;
 }
 
 .menuItem.subMenu > .menuTooltip {
@@ -243,14 +260,17 @@ address {
     .rightbar {
         position: static;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         max-width: 700px;
         width: 100%;
-        margin: 0 auto;
+        margin-left: 0;
+        margin-right: auto;
+        align-items: flex-start;
+        margin-left: 15px;
     }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 500px) {
     .page .ql-editor {
         font-style: normal;
         font-size: 16px;
@@ -262,11 +282,31 @@ address {
     }
 
     .inlineButton {
-        font-size: 14px;
+        font-size: 16px;
     }
 
     #headerH2Button {
-        font-size: 10px;
+        font-size: 14px;
+    }
+
+    #mainFormatTooltip {
+        width: 250px;
+        overflow-x: scroll;
+    }
+
+    #mainFormatTooltip::-webkit-scrollbar {
+        margin-left: 4px;
+        margin-right: 4px;
+        height: 5px;
+    }
+
+    #mainFormatTooltip::-webkit-scrollbar-track-piece  {
+        background-color: var(--tooltip-color);
+    }
+    
+    #mainFormatTooltip::-webkit-scrollbar-thumb {
+        height: 5px;
+        background-color: var(--tooltip-hover-color);
     }
 
     .lineButtons > .inlineButton {

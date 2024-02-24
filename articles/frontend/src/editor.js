@@ -10,6 +10,7 @@ import { isEditMode, isMobileView } from "./page";
 import { urlPrepare } from "./utils";
 import $ from "jquery";
 import Quill from "quill/core";
+import Delta from "quill-delta";
 
 export class ViewElement {
   setViewCondition() {}
@@ -170,6 +171,21 @@ export class AddMenu extends PopupMenu {
   constructor(quill) {
     super($("#addMenu").get(0));
     this.quill = quill;
+    this.initListeners();
+  }
+
+  initListeners() {
+    $("#menuDivider").on("click", () => {
+      this.addDivider();
+    });
+  }
+
+  addHeader(level) {}
+
+  addDivider() {
+    let selection = this.quill.getSelection(true);
+    let offset = selection != null ? selection.index : this.quill.getLength();
+    this.quill.insertEmbed(offset, "divider", true, Quill.sources.API);
   }
 
   setRelativePosition(element) {
@@ -201,12 +217,16 @@ export class Tooltip extends ViewElement {
     let zeroSign = placeOnTop ? 0 : 1;
 
     let rangeBounds = this.quill.getBounds(range);
+    let maxLeft = $(window).outerWidth() - tooltip.outerWidth() - 3;
     tooltip.css({
       top:
         rangeBounds.top -
         directionSign * tooltip.outerHeight() -
         (zeroSign * tooltip.outerHeight()) / 2,
-      left: rangeBounds.left,
+      left:
+        $(this.quill.container).offset().left + rangeBounds.left > maxLeft
+          ? maxLeft
+          : rangeBounds.left,
     });
   }
 }
