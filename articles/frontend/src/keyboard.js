@@ -40,8 +40,11 @@ export class KeyboardHandlers {
 
   static defaultNewLineHandler(range, context) {
     let blot = this.quill.scroll.descendants(BreakBlot, range.index);
-    console.log(this.quill.getFormat(range)["blockquoteBlock"]);
-    if (blot.length || this.quill.getFormat(range)["blockquoteBlock"]) {
+    if (
+      blot.length ||
+      this.quill.getFormat(range)["blockquoteBlock"] ||
+      this.quill.getFormat(range)["centerBlockquoteBlock"]
+    ) {
       this.quill.insertText(range.index, "\n", Quill.sources.USER);
       this.quill.setSelection(range.index + 1, Quill.sources.USER);
       this.quill.formatLine(
@@ -49,6 +52,7 @@ export class KeyboardHandlers {
         1,
         {
           blockquoteBlock: false,
+          centerBlockquoteBlock: false,
         },
         Quill.sources.USER
       );

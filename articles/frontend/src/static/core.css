@@ -54,6 +54,14 @@ body {
     content: "";
 }
 
+blockquote.centered-quote {
+    font-size: 22px;
+    margin: 15px 20px 15px;
+    padding: 0 15px;
+    text-align: center;
+    font-style: italic;
+}
+
 input:focus, textarea:focus, button:focus, [contenteditable=true]:focus {
   outline: none;
 }
@@ -222,6 +230,10 @@ button.pushable:hover {
 
 .tooltipButton.applied {
     color: gray;
+}
+
+.tooltipButton.center-quote {
+    color: var(--tooltip-hover-color)
 }
 
 #headerH2Button {

@@ -12,6 +12,7 @@ import $ from "jquery";
 import TitleBlot from "./blots/title";
 import { BreakBlot, DividerBlot } from "./blots/breaks";
 import BlockquoteBlot from "./blots/quote";
+import { CenteredBlockquoteBlot } from "./blots/quote";
 import TextParagraph from "./blots/text";
 import {
   HeaderBlot,
@@ -31,6 +32,7 @@ import { AddMenu, FormatTooltip, LineButtonGroup } from "./editor";
 import Bold from "quill/formats/bold";
 import Strike from "quill/formats/strike";
 import Italic from "quill/formats/italic";
+import Script from "quill/formats/script";
 import Underline from "quill/formats/underline";
 import { KeyboardHandlers } from "./keyboard";
 import LinkBlot from "./blots/link";
@@ -38,6 +40,7 @@ import LinkBlot from "./blots/link";
 Quill.register(Bold);
 Quill.register(Strike);
 Quill.register(Italic);
+Quill.register(Script);
 Quill.register(Underline);
 Quill.register(Highlight);
 Quill.register(LinkBlot);
@@ -53,6 +56,7 @@ Quill.register(HeaderH2Blot);
 Quill.register(HeaderH3Blot);
 Quill.register(HeaderH4Blot);
 Quill.register(HeaderH5Blot);
+Quill.register(CenteredBlockquoteBlot);
 
 function initQuill(articleElements) {
   let quill = new Quill(".page", {
@@ -67,6 +71,7 @@ function initQuill(articleElements) {
       "underline",
       "strike",
       "link",
+      "script",
       "highlight",
       "headerH1",
       "headerH2",
@@ -76,6 +81,7 @@ function initQuill(articleElements) {
       "titleBlock",
       "signatureBlock",
       "blockquoteBlock",
+      "centerBlockquoteBlock",
       "code",
       "textBreak",
       "divider",

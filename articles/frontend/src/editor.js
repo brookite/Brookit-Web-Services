@@ -11,6 +11,7 @@ import { urlPrepare } from "./utils";
 import $ from "jquery";
 import Quill from "quill/core";
 import Delta from "quill-delta";
+import TextParagraph from "./blots/text";
 
 export class ViewElement {
   setViewCondition() {}
@@ -175,12 +176,38 @@ export class AddMenu extends PopupMenu {
   }
 
   initListeners() {
-    $("#menuDivider").on("click", () => {
-      this.addDivider();
+    $("#menuDivider").on("click", this.addDivider.bind(this));
+    $("#menuHeadersH1").on("click", () => {
+      this.addHeader(1);
+    });
+
+    $("#menuHeadersH2").on("click", () => {
+      this.addHeader(2);
+    });
+
+    $("#menuHeadersH3").on("click", () => {
+      this.addHeader(3);
+    });
+
+    $("#menuHeadersH4").on("click", () => {
+      this.addHeader(4);
+    });
+
+    $("#menuHeadersH5").on("click", () => {
+      this.addHeader(5);
     });
   }
 
-  addHeader(level) {}
+  addHeader(level) {
+    let selection = this.quill.getSelection(true);
+    let offset = selection != null ? selection.index : this.quill.getLength();
+    let styles = {};
+    styles[`headerH${level}`] = true;
+    this.quill.updateContents(
+      new Delta().retain(offset).insert("\n", styles),
+      Quill.sources.SILENT
+    );
+  }
 
   addDivider() {
     let selection = this.quill.getSelection(true);
@@ -246,6 +273,8 @@ export class FormatTooltip extends Tooltip {
     $("#headerH2Button").on("click", this.header(2).bind(this));
     $("#highlightButton").on("click", this.highlight.bind(this));
     $("#quoteButton").on("click", this.quote.bind(this));
+    $("#alignButton").on("click", this.align.bind(this));
+    $("#indexButton").on("click", this.script.bind(this));
   }
 
   setVisible(state) {
@@ -304,6 +333,40 @@ export class FormatTooltip extends Tooltip {
     this.formatDone(range);
   }
 
+  align(event) {
+    let [applied, range] = this.prepareFormat(event);
+    let [textBlock, offset] = this.quill.scroll.descendants(
+      TextParagraph,
+      range.index,
+      range.length
+    );
+    switch (textBlock.getAlignment()) {
+      case "left":
+        textBlock.align("center");
+        break;
+      case "center":
+        textBlock.align("right");
+        break;
+      case "right":
+        textBlock.align("left");
+        break;
+    }
+    this.formatDone(range);
+  }
+
+  script(event) {
+    let [applied, range] = this.prepareFormat(event);
+    let format = this.quill.getFormat(range);
+    if (!format["script"]) {
+      this.quill.format("script", "sub");
+    } else if (format["script"] == "sub") {
+      this.quill.format("script", "super");
+    } else if (format["script"] == "super") {
+      this.quill.format("script", false);
+    }
+    this.formatDone(range);
+  }
+
   link(event) {
     let [applied, range] = this.prepareFormat(event);
     if (!applied) {
@@ -334,6 +397,11 @@ export class FormatTooltip extends Tooltip {
     return (event) => {
       let [applied, range] = this.prepareFormat(event);
       let format = `headerH${level}`;
+      this.quill.format("headerH1", false, Quill.sources.API);
+      this.quill.format("headerH2", false, Quill.sources.API);
+      this.quill.format("headerH3", false, Quill.sources.API);
+      this.quill.format("headerH4", false, Quill.sources.API);
+      this.quill.format("headerH5", false, Quill.sources.API);
       this.quill.format(format, !applied, Quill.sources.API);
       let blots = this.quill.scroll.descendants(
         classes[level - 1],
@@ -341,7 +409,7 @@ export class FormatTooltip extends Tooltip {
         range.length
       );
       blots.forEach((blot) => {
-        let index = quill.getIndex(blot);
+        let index = this.quill.getIndex(blot);
         let length = blot.length();
         this.quill.formatText(
           index,
@@ -360,12 +428,31 @@ export class FormatTooltip extends Tooltip {
 
   quote(event) {
     let [applied, range] = this.prepareFormat(event);
-    this.quill.format("blockquoteBlock", !applied, Quill.sources.API);
+
+    let centered = event.target.classList.contains("center-quote")
+      ? true
+      : false;
+    applied ||= centered;
+
+    if (applied && centered) {
+      this.quill.format("blockquoteBlock", false, Quill.sources.API);
+      this.quill.format("centerBlockquoteBlock", false, Quill.sources.SILENT);
+    } else if (applied && !centered) {
+      this.quill.format("blockquoteBlock", false, Quill.sources.API);
+      this.quill.format("centerBlockquoteBlock", true, Quill.sources.SILENT);
+    } else {
+      this.quill.format("blockquoteBlock", !applied, Quill.sources.API);
+    }
     this.formatDone(range);
   }
 
   updateButtonState(range) {
     let formats = range == null ? {} : this.quill.getFormat(range);
+    let [textBlock, offset] = this.quill.scroll.descendants(
+      TextParagraph,
+      range.index,
+      range.length
+    );
 
     let inside_code = !!formats["code-block"];
     let inside_header = !!(
@@ -382,9 +469,53 @@ export class FormatTooltip extends Tooltip {
     $("#underlineButton").toggleClass("applied", !!formats["underline"]);
     $("#strikeButton").toggleClass("applied", !!formats["strike"]);
     $("#headerH1Button").toggleClass("applied", !!formats["headerH1"]);
-    $("#headerH2Button").toggleClass("applied", !!formats["headerH2"]);
+    $("#headerH2Button").toggleClass(
+      "applied",
+      !!formats["headerH2"] ||
+        !!formats["headerH3"] ||
+        !!formats["headerH4"] ||
+        !!formats["headerH5"]
+    );
     $("#highlightButton").toggleClass("applied", !!formats["highlight"]);
+
     $("#quoteButton").toggleClass("applied", !!formats["blockquoteBlock"]);
+    $("#quoteButton").toggleClass(
+      "center-quote",
+      !!formats["centerBlockquoteBlock"]
+    );
+
+    $("#indexButton").toggleClass(
+      "applied",
+      formats["script"] == "sub" || formats["script"] == "super"
+    );
+    $("#indexButton").toggleClass(
+      "ri-subscript",
+      formats["script"] == "sub" || !formats["script"]
+    );
+    $("#indexButton").toggleClass(
+      "ri-superscript",
+      formats["script"] == "super"
+    );
+
+    if (textBlock != null) {
+      let align = textBlock.getAlignment();
+      switch (align) {
+        case "left":
+          align = "ri-align-left";
+          break;
+        case "center":
+          align = "ri-align-center";
+          break;
+        case "right":
+          align = "ri-align-right";
+          break;
+      }
+      let button = $("#alignButton");
+      button.toggleClass("ri-align-left", false);
+      button.toggleClass("ri-align-center", false);
+      button.toggleClass("ri-align-right", false);
+      button.toggleClass(align, true);
+    }
 
     if (range != null) {
       let links = this.quill.scroll.descendants(
@@ -412,6 +543,8 @@ export class FormatTooltip extends Tooltip {
     $("#headerH2Button").toggleClass("hidden", inside_signature);
     $("#highlightButton").toggleClass("hidden", inside_signature);
     $("#quoteButton").toggleClass("hidden", inside_signature);
+    $("#alignButton").toggleClass("hidden", inside_signature);
+    $("#indexButton").toggleClass("hidden", inside_signature);
   }
 
   isEnabled() {
