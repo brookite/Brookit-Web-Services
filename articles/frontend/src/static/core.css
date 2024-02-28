@@ -228,6 +228,10 @@ button.pushable:hover {
     color: white
 }
 
+.ql-editor {
+    text-align: start;
+}
+
 .tooltipButton.applied {
     color: gray;
 }
@@ -242,6 +246,7 @@ button.pushable:hover {
 
 .formatTooltip.shown, .textTooltip.shown, .menuTooltip.shown {
     display: block;
+    z-index: 2;
 }
 
 .tooltip.shown {
@@ -333,6 +338,10 @@ address {
 @media (max-width: 950px) {
     .lineButtons {
         right: 0;
+    }
+
+    .lineButtons[dir="rtl"] {
+        right: 90%
     }
 }
 

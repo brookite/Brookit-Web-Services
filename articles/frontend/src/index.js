@@ -266,3 +266,9 @@ $(document).on("click", (e) => {
     AddMenu.shutdown();
   }
 });
+document
+  .querySelector("html")
+  .setAttribute(
+    "dir",
+    window.getComputedStyle(document.querySelector("html")).direction
+  );

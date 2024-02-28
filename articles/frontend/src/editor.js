@@ -232,6 +232,10 @@ export class Tooltip extends ViewElement {
   constructor(quill) {
     super();
     this.quill = quill;
+    this.getJQueryElement().attr(
+      "dir",
+      window.getComputedStyle(document.querySelector("html")).direction
+    );
   }
 
   updatePosition(placeOnTop, range) {
@@ -255,6 +259,14 @@ export class Tooltip extends ViewElement {
           ? maxLeft
           : rangeBounds.left,
     });
+    if (
+      tooltip.get(0).getAttribute("dir") == "rtl" &&
+      $(window).outerWidth() >= 1050
+    ) {
+      tooltip.css({
+        left: maxLeft - $(".rightbar").outerWidth(),
+      });
+    }
   }
 }
 
@@ -612,6 +624,10 @@ export class LineButtonGroup extends ViewElement {
     super();
     this.quill = quill;
     this.initListeners();
+    this.getJQueryElement().attr(
+      "dir",
+      window.getComputedStyle(document.querySelector("html")).direction
+    );
   }
 
   initListeners() {
