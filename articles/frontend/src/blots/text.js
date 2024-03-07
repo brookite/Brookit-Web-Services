@@ -1,6 +1,9 @@
 import { MultiLineBlockBlot } from "./blocks";
 
 class TextParagraph extends MultiLineBlockBlot {
+  static blotName = "paragraph";
+  static tagName = "P";
+
   getAlignment() {
     if (!this.domNode.getAttribute("align")) {
       return "left";
@@ -13,7 +16,5 @@ class TextParagraph extends MultiLineBlockBlot {
     this.domNode.setAttribute("align", value);
   }
 }
-TextParagraph.blotName = "paragraph";
-TextParagraph.tagName = "P";
 
 export { TextParagraph as default };

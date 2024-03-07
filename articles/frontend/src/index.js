@@ -25,7 +25,7 @@ import SignatureBlot from "./blots/signature";
 import { ServiceBlockBlot } from "./blots/blocks";
 import { Highlight } from "./blots/inlines";
 
-import { isEditMode } from "./page";
+import { isEditMode, setProperTextDirection } from "./page";
 
 import { AddMenu, FormatTooltip, LineButtonGroup } from "./editor";
 
@@ -36,6 +36,7 @@ import Script from "quill/formats/script";
 import Underline from "quill/formats/underline";
 import { KeyboardHandlers } from "./keyboard";
 import LinkBlot from "./blots/link";
+import { ImageBlot } from "./blots/embeds";
 
 Quill.register(Bold);
 Quill.register(Strike);
@@ -48,6 +49,7 @@ Quill.register(LinkBlot);
 Quill.register(TitleBlot);
 Quill.register(SignatureBlot);
 Quill.register(TextParagraph);
+Quill.register(ImageBlot);
 Quill.register(BreakBlot);
 Quill.register(DividerBlot);
 Quill.register(BlockquoteBlot);
@@ -83,6 +85,7 @@ function initQuill(articleElements) {
       "blockquoteBlock",
       "centerBlockquoteBlock",
       "code",
+      "image",
       "textBreak",
       "divider",
       "code-block",
@@ -266,9 +269,4 @@ $(document).on("click", (e) => {
     AddMenu.shutdown();
   }
 });
-document
-  .querySelector("html")
-  .setAttribute(
-    "dir",
-    window.getComputedStyle(document.querySelector("html")).direction
-  );
+setProperTextDirection($(".view").get(0));

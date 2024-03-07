@@ -117,10 +117,16 @@ button.pushable:hover {
     color:white;
 }
 
-[data-placeholder].empty::before {
+.page [data-placeholder].empty::before {
     content: attr(data-placeholder);
     position: absolute;
     overflow: hidden;
+}
+
+.page figcaption[data-placeholder]:empty::after {
+    position: relative;
+    content: attr(data-placeholder);
+    text-align: center;
 }
 
 
@@ -230,6 +236,10 @@ button.pushable:hover {
 
 .ql-editor {
     text-align: start;
+}
+
+#mainTooltipFileButton {
+    display: none;
 }
 
 .tooltipButton.applied {

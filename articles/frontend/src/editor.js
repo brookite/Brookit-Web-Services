@@ -6,8 +6,8 @@ import {
   HeaderH5Blot,
 } from "./blots/headers";
 import LinkBlot from "./blots/link";
-import { isEditMode, isMobileView } from "./page";
-import { urlPrepare } from "./utils";
+import { isEditMode, isMobileView, setProperTextDirection } from "./page";
+import { selectImage, showFlash, urlPrepare } from "./utils";
 import $ from "jquery";
 import Quill from "quill/core";
 import Delta from "quill-delta";
@@ -196,6 +196,61 @@ export class AddMenu extends PopupMenu {
     $("#menuHeadersH5").on("click", () => {
       this.addHeader(5);
     });
+
+    $("#menuImage").on("click", () => {
+      this.addImage();
+    });
+  }
+
+  addImage() {
+    let urlAction = (value) => {
+      let range = this.quill.getSelection(true);
+      this.quill.updateContents(
+        new Delta()
+          .retain(range.index)
+          .delete(range.length)
+          .insert({ image: value }),
+        Quill.sources.USER
+      );
+    };
+
+    let tp = new PromptTooltip(this.quill, urlAction);
+
+    let postAction = () => {
+      selectImage(
+        "image/gif, image/jpeg, image/jpg, image/png",
+        (quill, e) => {
+          let image = e.target.files[0];
+          if (!image) {
+            showFlash("Ошибка формата файла", "error");
+          }
+          let reader = new FileReader();
+          let range = quill.getSelection(true);
+          reader.onload = (e) => {
+            quill.updateContents(
+              new Delta()
+                .retain(range.index)
+                .delete(range.length)
+                .insert({ image: e.target.result }),
+              Quill.sources.USER
+            );
+          };
+          reader.readAsDataURL(image);
+        },
+        this.quill
+      );
+      tp.hide();
+    };
+
+    this.hide();
+    tp.updatePositionCallback = (element) => {
+      let offset = $("#add_more_button").offset();
+      element.css({
+        top: offset.top,
+      });
+    };
+    tp.enableFileButton(postAction);
+    tp.show();
   }
 
   addHeader(level) {
@@ -232,13 +287,14 @@ export class Tooltip extends ViewElement {
   constructor(quill) {
     super();
     this.quill = quill;
-    this.getJQueryElement().attr(
-      "dir",
-      window.getComputedStyle(document.querySelector("html")).direction
-    );
+    setProperTextDirection(this.getJQueryElement().get(0));
   }
 
   updatePosition(placeOnTop, range) {
+    if (this.updatePositionCallback) {
+      this.updatePositionCallback(this.getJQueryElement());
+      return;
+    }
     let tooltip = this.getJQueryElement();
     if (!range) {
       range = this.quill.getSelection();
@@ -581,6 +637,17 @@ export class PromptTooltip extends Tooltip {
     });
   }
 
+  enableFileButton(callback) {
+    $("#mainTooltipFileButton").css({
+      display: "inline",
+    });
+    $("#mainTooltipFileButton").on("click", callback);
+  }
+
+  setPlaceholder(text) {
+    $(".tooltipPrompt").attr("placeholder", text);
+  }
+
   setVisible(state) {
     if (state) {
       this.updatePosition(isMobileView() ? false : true);
@@ -623,20 +690,17 @@ export class LineButtonGroup extends ViewElement {
   constructor(quill) {
     super();
     this.quill = quill;
+    this.menu = new AddMenu(this.quill);
     this.initListeners();
-    this.getJQueryElement().attr(
-      "dir",
-      window.getComputedStyle(document.querySelector("html")).direction
-    );
+    setProperTextDirection(this.getJQueryElement().get(0));
   }
 
   initListeners() {
+    $("#image_button").on("click", this.menu.addImage.bind(this.menu));
     $("#add_more_button").on("click", () => {
-      let menu = new AddMenu(this.quill);
-      menu.setRelativePosition($("#add_more_button"));
-      menu.show();
+      this.menu.setRelativePosition($("#add_more_button"));
+      this.menu.show();
     });
-    $("#image_button").on("click", () => {});
   }
 
   getJQueryElement() {

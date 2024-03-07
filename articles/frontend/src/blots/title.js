@@ -1,6 +1,9 @@
 import { ServiceBlockBlot } from "./blocks";
 
 class TitleBlot extends ServiceBlockBlot {
+  static blotName = "titleBlock";
+  static tagName = "h1";
+
   static create(value) {
     let domNode = super.create(value);
     domNode.setAttribute("data-placeholder", "Название статьи");
@@ -9,6 +12,4 @@ class TitleBlot extends ServiceBlockBlot {
   }
 }
 
-TitleBlot.blotName = "titleBlock";
-TitleBlot.tagName = "h1";
 export { TitleBlot as default };
