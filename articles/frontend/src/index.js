@@ -36,7 +36,7 @@ import Script from "quill/formats/script";
 import Underline from "quill/formats/underline";
 import { KeyboardHandlers } from "./keyboard";
 import LinkBlot from "./blots/link";
-import { ImageBlot } from "./blots/embeds";
+import { FigureBlot, ImageBlot } from "./blots/embeds";
 
 Quill.register(Bold);
 Quill.register(Strike);
@@ -165,6 +165,7 @@ function initQuill(articleElements) {
       }
     }
     checkBlotsState(quill);
+    checkFiguresState(quill, articleElements, range);
   });
 
   /*
@@ -189,6 +190,25 @@ function prepareArticleEditView(quill) {
     Quill.sources.SILENT
   );
   checkBlotsState(quill);
+}
+
+function checkFiguresState(quill, articleElements, range) {
+  let allFigures = quill.scroll.descendants(
+    FigureBlot,
+    0,
+    quill.scroll.length()
+  );
+  let currentFigure = quill.scroll.descendant(FigureBlot, range.index)[0];
+  allFigures.forEach((blot) => {
+    if (currentFigure !== blot) {
+      blot.removeSelection();
+    }
+  });
+  if (currentFigure) {
+    currentFigure.select();
+    articleElements.formatTooltip.hide();
+    articleElements.lineButtons.hide();
+  }
 }
 
 function checkBlotsState(quill) {

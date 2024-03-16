@@ -1,6 +1,7 @@
 import Quill from "quill/core";
 import { MultiLineBlockBlot, ServiceBlockBlot } from "./blots/blocks";
 import { BreakBlot } from "./blots/breaks";
+import { FigureBlot } from "./blots/embeds";
 
 export class KeyboardHandlers {
   static serviceEnter(range, context) {
@@ -40,6 +41,14 @@ export class KeyboardHandlers {
 
   static defaultNewLineHandler(range, context) {
     let blot = this.quill.scroll.descendants(BreakBlot, range.index);
+
+    let [figure, _] = this.quill.scroll.descendant(FigureBlot, range.index);
+    if (figure) {
+      this.quill.setSelection(range.index + 1, 0, Quill.sources.SILENT);
+      this.quill.deleteText(range.index, figure.length(), Quill.sources.USER);
+      return false;
+    }
+
     if (
       blot.length ||
       this.quill.getFormat(range)["blockquoteBlock"] ||
@@ -90,6 +99,18 @@ export class KeyboardHandlers {
 
   static backspace(range, context) {
     let [line_blot, index] = this.quill.getLine(range.index);
+    console.log(line_blot);
+
+    if (line_blot instanceof FigureBlot) {
+      this.quill.setSelection(range.index - 1, 0, Quill.sources.SILENT);
+      this.quill.deleteText(
+        range.index,
+        line_blot.length(),
+        Quill.sources.USER
+      );
+      return false;
+    }
+
     if (
       line_blot.prev instanceof ServiceBlockBlot ||
       line_blot instanceof ServiceBlockBlot

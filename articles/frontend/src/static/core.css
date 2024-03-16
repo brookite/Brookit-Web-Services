@@ -48,13 +48,40 @@ body {
     font-size: 32px;
 }
 
+.page img {
+    max-width: 100%;
+    max-height: 1000px;
+}
+
+.page .figureView.selected img {
+    border: 3px solid var(--tooltip-hover-color);
+}
+
 .page hr {
     display: block;
     border-top: 1px solid var(--hr-color);
     content: "";
 }
 
-blockquote.centered-quote {
+.page .figureView {
+    text-align: center;
+}
+
+.page .captionInput {
+    font-family: var(--article-font-family);
+    font-size: 18px;
+    border: none;
+    padding: 0;
+    margin: 0;
+    background: none;
+    resize: none;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    width: 100%;
+    text-align: center;
+}
+
+.page blockquote.centered-quote {
     font-size: 22px;
     margin: 15px 20px 15px;
     padding: 0 15px;
@@ -122,13 +149,6 @@ button.pushable:hover {
     position: absolute;
     overflow: hidden;
 }
-
-.page figcaption[data-placeholder]:empty::after {
-    position: relative;
-    content: attr(data-placeholder);
-    text-align: center;
-}
-
 
 .lineButtons {
     visibility: hidden;

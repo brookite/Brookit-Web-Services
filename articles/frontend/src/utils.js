@@ -15,6 +15,15 @@ export function urlPrepare(value) {
   return value;
 }
 
+export function base64_to_bytes(text, type) {
+  const binaryArray = new Uint8Array(
+    atob(text)
+      .split("")
+      .map((char) => char.charCodeAt(0))
+  );
+  return new Blob([binaryArray], { type: type });
+}
+
 export function selectImage(accept, callback, context) {
   let input = document.createElement("input");
   input.setAttribute("type", "file");

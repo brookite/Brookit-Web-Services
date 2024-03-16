@@ -12,6 +12,7 @@ import $ from "jquery";
 import Quill from "quill/core";
 import Delta from "quill-delta";
 import TextParagraph from "./blots/text";
+import { FigureBlot } from "./blots/embeds";
 
 export class ViewElement {
   setViewCondition() {}
@@ -212,6 +213,9 @@ export class AddMenu extends PopupMenu {
           .insert({ image: value }),
         Quill.sources.USER
       );
+      let figure,
+        index = this.quill.descendant(FigureBlot, range.index + 1)[0];
+      this.quill.setSelection(index, figure.length(), Quill.sources.SILENT);
     };
 
     let tp = new PromptTooltip(this.quill, urlAction);
@@ -232,6 +236,15 @@ export class AddMenu extends PopupMenu {
                 .retain(range.index)
                 .delete(range.length)
                 .insert({ image: e.target.result }),
+              Quill.sources.USER
+            );
+            let [figure, index] = quill.scroll.descendant(
+              FigureBlot,
+              range.index
+            );
+            quill.setSelection(
+              range.index + 1,
+              figure.length(),
               Quill.sources.USER
             );
           };
