@@ -1,4 +1,26 @@
-let uploadUrl = "/paperpad/upload";
+export const uploadUrl = "/paperpad/upload";
+export const embedPathPrefix = "/paperpad/embed";
+export const embedInfoPrefix = "/paperpad/embedInfo";
+
+export const dummyImage = "/paperpad/empty.png";
+
+export function matchEmbed(query, callback, errorCallback) {
+  let data = {};
+  if (query.match(/^(https?):\/\/\S+/i)) {
+    data.url = query;
+    query = "";
+  } else if (query.startsWith("/")) {
+    query += query;
+  }
+  $.ajax({
+    url: embedInfoPrefix + query,
+    type: "GET",
+    data: data,
+    dataType: "json",
+    success: callback,
+    error: errorCallback,
+  });
+}
 
 export function uploadFile(
   type,

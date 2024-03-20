@@ -36,7 +36,7 @@ import Script from "quill/formats/script";
 import Underline from "quill/formats/underline";
 import { KeyboardHandlers } from "./keyboard";
 import LinkBlot from "./blots/link";
-import { FigureBlot, ImageBlot } from "./blots/embeds";
+import { EmbedBlot, FigureBlot, ImageBlot } from "./blots/embeds";
 
 Quill.register(Bold);
 Quill.register(Strike);
@@ -50,6 +50,7 @@ Quill.register(TitleBlot);
 Quill.register(SignatureBlot);
 Quill.register(TextParagraph);
 Quill.register(ImageBlot);
+Quill.register(EmbedBlot);
 Quill.register(BreakBlot);
 Quill.register(DividerBlot);
 Quill.register(BlockquoteBlot);
@@ -86,6 +87,7 @@ function initQuill(articleElements) {
       "centerBlockquoteBlock",
       "code",
       "image",
+      "embed",
       "textBreak",
       "divider",
       "code-block",

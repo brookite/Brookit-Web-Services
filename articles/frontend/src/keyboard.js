@@ -99,7 +99,6 @@ export class KeyboardHandlers {
 
   static backspace(range, context) {
     let [line_blot, index] = this.quill.getLine(range.index);
-    console.log(line_blot);
 
     if (line_blot instanceof FigureBlot) {
       this.quill.setSelection(range.index - 1, 0, Quill.sources.SILENT);

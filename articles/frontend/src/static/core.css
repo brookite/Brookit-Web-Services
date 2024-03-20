@@ -65,6 +65,25 @@ body {
 
 .page .figureView {
     text-align: center;
+    position: relative;
+    display: inline-block;
+}
+
+.page .figureView.loading img {
+    opacity: 0.5;
+}
+
+.page .figureOverlayText {
+    position: absolute;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    color:var(--tooltip-hover-color); 
+    padding: 10px 20px; 
+    font-size: 24px; 
+    font-family: var(--tool-font-family);
+    font-weight: 700;
+    text-align: center;
 }
 
 .page .captionInput {

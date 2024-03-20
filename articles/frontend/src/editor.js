@@ -198,9 +198,9 @@ export class AddMenu extends PopupMenu {
       this.addHeader(5);
     });
 
-    $("#menuImage").on("click", () => {
-      this.addImage();
-    });
+    $("#menuImage").on("click", this.addImage.bind(this));
+    $("#menuVideo").on("click", this.addEmbed.bind(this));
+    $("#menuEmbed").on("click", this.addEmbed.bind(this));
   }
 
   addImage() {
@@ -264,6 +264,15 @@ export class AddMenu extends PopupMenu {
     };
     tp.enableFileButton(postAction);
     tp.show();
+  }
+
+  addEmbed() {
+    let range = this.quill.getSelection(true);
+    let line = this.quill.scroll.line(range.index)[0];
+    line.domNode.setAttribute(
+      "data-placeholder",
+      "Вставьте ссылку на видео, аудио или другой встраиваемый контент..."
+    );
   }
 
   addHeader(level) {
