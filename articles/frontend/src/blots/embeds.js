@@ -157,6 +157,7 @@ export class EmbedBlot extends FigureBlot {
               figureView.appendChild(iframe);
               if (!data.figureSelecting) {
                 $(figureView).off("click");
+                this.removeSelection();
               }
             },
             () => {
