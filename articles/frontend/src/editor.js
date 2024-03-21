@@ -224,6 +224,7 @@ export class AddMenu extends PopupMenu {
 
     let postAction = () => {
       selectImage(
+        $("#main-file-accept-button").get(0),
         "image/gif, image/jpeg, image/jpg, image/png",
         (quill, e) => {
           let image = e.target.files[0];

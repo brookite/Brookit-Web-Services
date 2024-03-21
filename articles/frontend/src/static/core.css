@@ -278,7 +278,7 @@ button.pushable:hover {
 }
 
 #mainTooltipFileButton {
-    display: none;
+    line-height: normal;
 }
 
 .tooltipButton.applied {

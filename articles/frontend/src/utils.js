@@ -62,18 +62,12 @@ export function base64_to_bytes(text, type) {
   return new Blob([binaryArray], { type: type });
 }
 
-export function selectImage(accept, callback, context) {
-  let input = document.querySelector(".file-accept.hidden");
-  input = document.createElement("input");
-  input.classList.add("hidden");
-  input.classList.add("file-accept");
+export function selectImage(input, accept, callback, context) {
   input.setAttribute("type", "file");
   input.setAttribute("accept", accept);
   input.addEventListener("change", (e) => {
     callback(context, e);
   });
-  input.click();
-  //TODO: fix adding error
 }
 
 export function showFlash(text, type) {}
