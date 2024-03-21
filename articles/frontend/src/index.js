@@ -3,10 +3,8 @@ import "quill/dist/quill.core.css";
 import "./static/core.css";
 
 import Quill from "quill/core";
-import Delta from "quill-delta";
 import Keyboard from "quill/modules/keyboard";
 import Block from "quill/blots/block";
-import BlockEmbed from "quill/blots/embed";
 import $ from "jquery";
 
 import TitleBlot from "./blots/title";
@@ -28,6 +26,11 @@ import { Highlight } from "./blots/inlines";
 import { isEditMode, setProperTextDirection } from "./page";
 
 import { AddMenu, FormatTooltip, LineButtonGroup } from "./editor";
+import {
+  checkBlotsState,
+  checkFiguresState,
+  prepareArticleEditView,
+} from "./core";
 
 import Bold from "quill/formats/bold";
 import Strike from "quill/formats/strike";
@@ -61,7 +64,7 @@ Quill.register(HeaderH4Blot);
 Quill.register(HeaderH5Blot);
 Quill.register(CenteredBlockquoteBlot);
 
-function initQuill(articleElements) {
+function initQuill(editorElements) {
   let quill = new Quill(".page", {
     readOnly: false,
     fileSizeLimit: 8 * 1024 * 1024,
@@ -147,27 +150,27 @@ function initQuill(articleElements) {
     let [block, offset] = quill.scroll.descendant(Block, range.index);
 
     if (range.length === 0) {
-      articleElements.formatTooltip.hide();
+      quill.editorElements.formatTooltip.hide();
       if (
         block != null &&
         !(block instanceof ServiceBlockBlot) &&
         !(block instanceof BlockquoteBlot) &&
         !$(block.domNode).text().trim().length
       ) {
-        articleElements.lineButtons.show();
+        quill.editorElements.lineButtons.show();
       } else {
-        articleElements.lineButtons.hide();
+        quill.editorElements.lineButtons.hide();
       }
     } else {
       if (!(block instanceof TitleBlot)) {
-        articleElements.formatTooltip.show();
-        articleElements.formatTooltip.updateButtonState(range);
+        quill.editorElements.formatTooltip.show();
+        quill.editorElements.formatTooltip.updateButtonState(range);
       } else {
-        articleElements.formatTooltip.hide();
+        quill.editorElements.formatTooltip.hide();
       }
     }
     checkBlotsState(quill);
-    checkFiguresState(quill, articleElements, range);
+    checkFiguresState(quill, quill.editorElements, range);
   });
 
   /*
@@ -180,111 +183,18 @@ function initQuill(articleElements) {
 
   prepareArticleEditView(quill);
 
+  quill.editorElements = editorElements;
+
   return quill;
 }
 
-function prepareArticleEditView(quill) {
-  quill.setContents(
-    new Delta()
-      .insert("\n", { titleBlock: true })
-      .insert("\n", { signatureBlock: true })
-      .insert("\n", { paragraph: true }),
-    Quill.sources.SILENT
-  );
-  checkBlotsState(quill);
-}
-
-function checkFiguresState(quill, articleElements, range) {
-  let allFigures = quill.scroll.descendants(
-    FigureBlot,
-    0,
-    quill.scroll.length()
-  );
-  let currentFigure = quill.scroll.descendant(FigureBlot, range.index)[0];
-  allFigures.forEach((blot) => {
-    if (currentFigure !== blot) {
-      blot.removeSelection();
-    }
-  });
-  if (currentFigure) {
-    currentFigure.select();
-    articleElements.formatTooltip.hide();
-    articleElements.lineButtons.hide();
-  }
-}
-
-function checkBlotsState(quill) {
-  let lines = quill.getLines();
-
-  if (!(lines[0] instanceof BlockEmbed)) {
-    quill.formatLine(0, 1, { titleBlock: true }, Quill.sources.SILENT);
-  } else {
-    quill.updateContents(
-      new Delta()
-        .insert("\n", { titleBlock: true })
-        .insert("\n", { signatureBlock: true }),
-      Quill.sources.SILENT
-    );
-  }
-
-  if (!lines[1]) {
-    let offset = quill.getLength();
-    quill.updateContents(
-      new Delta().retain(offset).insert("\n", { signatureBlock: true }),
-      Quill.sources.SILENT
-    );
-  } else if (!(lines[1] instanceof BlockEmbed)) {
-    let offset = quill.getIndex(lines[1]);
-    quill.formatLine(offset, 1, { signatureBlock: true }, Quill.sources.SILENT);
-  } else {
-    let offset = quill.getIndex(lines[1]);
-    quill.updateContents(
-      new Delta().retain(offset).insert("\n", { signatureBlock: true }),
-      Quill.sources.SILENT
-    );
-  }
-
-  lines = quill.getLines();
-
-  lines.forEach((line, i) => {
-    if (line instanceof ServiceBlockBlot && i > 1) {
-      quill.formatLine(
-        quill.getIndex(line),
-        1,
-        { titleBlock: false, signatureBlock: false },
-        Quill.sources.SILENT
-      );
-    }
-
-    if (line.domNode.tagName == "P") {
-      if (lines.length == 3 && i == 2) {
-        line.domNode.setAttribute(
-          "data-placeholder",
-          "Начните писать вашу статью..."
-        );
-      } else {
-        line.domNode.removeAttribute("data-placeholder");
-      }
-    }
-
-    if (line.domNode.hasAttribute("data-placeholder")) {
-      $(line.domNode).toggleClass(
-        "empty",
-        !$(line.domNode).text().trim().length
-      );
-    } else {
-      $(line.domNode).removeClass("empty");
-    }
-  });
-}
-
-let articleElements = {
+let editorElements = {
   formatTooltip: undefined,
   lineButtons: undefined,
 };
-export let quill = initQuill(articleElements);
-articleElements.formatTooltip = new FormatTooltip(quill);
-articleElements.lineButtons = new LineButtonGroup(quill);
+export let quill = initQuill(editorElements);
+quill.editorElements.formatTooltip = new FormatTooltip(quill);
+quill.editorElements.lineButtons = new LineButtonGroup(quill);
 
 $(document).on("click", (e) => {
   if (!$(e.target).is(".menuTooltip *, .menuTooltip, #add_more_button")) {

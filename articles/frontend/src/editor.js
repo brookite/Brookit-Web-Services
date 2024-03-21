@@ -213,8 +213,10 @@ export class AddMenu extends PopupMenu {
           .insert({ image: value }),
         Quill.sources.USER
       );
-      let figure,
-        index = this.quill.descendant(FigureBlot, range.index + 1)[0];
+      let [figure, index] = this.quill.scroll.descendant(
+        FigureBlot,
+        range.index
+      );
       this.quill.setSelection(index, figure.length(), Quill.sources.SILENT);
     };
 
@@ -268,11 +270,13 @@ export class AddMenu extends PopupMenu {
 
   addEmbed() {
     let range = this.quill.getSelection(true);
-    let line = this.quill.scroll.line(range.index)[0];
+    let [line, _] = this.quill.getLine(range.index);
     line.domNode.setAttribute(
       "data-placeholder",
       "Вставьте ссылку на видео, аудио или другой встраиваемый контент..."
     );
+    line.domNode.setAttribute("data-inlineInput", "embed");
+    $(line.domNode).toggleClass("empty", true);
   }
 
   addHeader(level) {

@@ -2,6 +2,7 @@ import Quill from "quill/core";
 import { MultiLineBlockBlot, ServiceBlockBlot } from "./blots/blocks";
 import { BreakBlot } from "./blots/breaks";
 import { FigureBlot } from "./blots/embeds";
+import { detectUrlOrEmbed, insertBlotByInlineQuery } from "./core";
 
 export class KeyboardHandlers {
   static serviceEnter(range, context) {
@@ -48,6 +49,16 @@ export class KeyboardHandlers {
       this.quill.deleteText(range.index, figure.length(), Quill.sources.USER);
       return false;
     }
+
+    let [line, __] = this.quill.getLine(range.index);
+    let inputQuery;
+    if ((inputQuery = line.domNode.getAttribute("data-inlineInput"))) {
+      line.domNode.removeAttribute("data-inlineInput");
+      insertBlotByInlineQuery(this.quill, line, inputQuery);
+      this.quill.setSelection(range.index + 1, Quill.sources.USER);
+    }
+
+    detectUrlOrEmbed(this.quill, line, range);
 
     if (
       blot.length ||

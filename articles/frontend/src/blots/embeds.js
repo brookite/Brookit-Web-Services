@@ -6,7 +6,12 @@ import {
   matchEmbed,
   uploadFile,
 } from "../server";
-import { base64_to_bytes, showFlash } from "../utils";
+import {
+  base64_to_bytes,
+  matchBase64Data,
+  matchUrl,
+  showFlash,
+} from "../utils";
 
 export class FigureBlot extends BlockEmbed {
   static blotName = "abstractFigure";
@@ -81,12 +86,10 @@ export class ImageBlot extends FigureBlot {
   }
 
   uploadToServer(src) {
-    let matches = src.match(
-      /^data:(image\/jpe?g|image\/gif|image\/png);base64,(.*)$/
-    );
-    if (matches && canUploadImageToServer()) {
+    let [base64_data, type] = matchBase64Data(src);
+    if (base64_data && canUploadImageToServer()) {
       this.figureView.classList.add("loading");
-      let bytes = base64_to_bytes(matches[1], matches[0]);
+      let bytes = base64_to_bytes(base64_data, type);
       uploadFile(
         "image",
         bytes,
@@ -123,9 +126,9 @@ export class EmbedBlot extends FigureBlot {
   static blotName = "embed";
 
   _buildFigure(figureView, value) {
-    if ((match = value.match(/^(https?):\/\/\S+/i))) {
+    if (matchUrl(value)) {
       let element = document.createElement("a");
-      element.href = url;
+      element.href = value;
       if (element.pathname.match(/\.(webm|mp4)$/i)) {
         this.embed = document.createElement("video");
         this.embed.setAttribute("src", value);

@@ -1,3 +1,5 @@
+import $ from "jquery";
+
 export const uploadUrl = "/paperpad/upload";
 export const embedPathPrefix = "/paperpad/embed";
 export const embedInfoPrefix = "/paperpad/embedInfo";
@@ -6,11 +8,13 @@ export const dummyImage = "/paperpad/empty.png";
 
 export function matchEmbed(query, callback, errorCallback) {
   let data = {};
-  if (query.match(/^(https?):\/\/\S+/i)) {
+  if (matchSupportedEmbeds(query)) {
     data.url = query;
     query = "";
-  } else if (query.startsWith("/")) {
-    query += query;
+  } else if (query.startsWith(embedPathPrefix)) {
+    query = query.replace(embedPathPrefix, "");
+  } else {
+    return false;
   }
   $.ajax({
     url: embedInfoPrefix + query,
@@ -66,5 +70,22 @@ export function uploadFile(
 }
 
 export function canUploadImageToServer() {
+  // TODO: can upload?
+  return false;
+}
+
+export function matchSupportedEmbeds(url) {
+  const regex = [
+    /^(?:https?:\/\/)?(?:www.)?(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})$/gi,
+    "^" + embedPathPrefix.replaceAll("/", "\\/") + "\\/(\\S+)$",
+    /^(?:https?:\/\/)?(?:www.)?rutube\.ru\/video\/(\S+)$/,
+    /^(?:https?:\/\/)?(?:vk\.com|vk\.ru|vkontakte\.ru)\/video(-?\d+)_(\d+)$/,
+    /^(?:https?:\/\/\S+)?(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/(?:[^\/]*)\/videos\/|album\/(?:\d+)\/video\/|video\/|)(\d+)(?:[a-zA-Z0-9_\-]+)?$/i,
+  ];
+  for (let expr of regex) {
+    if (url.match(expr)) {
+      return true;
+    }
+  }
   return false;
 }
